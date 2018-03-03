@@ -1,5 +1,5 @@
 {
-    "name": "alexpts/psr15-middleware-manager.git",
+    "name": "alexpts/psr15-middleware-manager",
     "description": "Middleware manager compatible with the PSR-7 and PSR-15",
     "homepage": "https://github.com/alexpts/psr15-middleware-manager",
     "license": "MIT",
