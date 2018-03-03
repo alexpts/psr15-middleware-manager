@@ -4,9 +4,11 @@
     "homepage": "https://github.com/alexpts/psr15-middleware-manager",
     "license": "MIT",
     "type": "library",
+    "optimize-autoloader": true,
     "keywords": [
         "middleware",
-        "psr-7"
+        "psr-7",
+        "psr-15"
     ],
     "authors": [{
         "name": "Alexpts",
