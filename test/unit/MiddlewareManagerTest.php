@@ -86,4 +86,17 @@ class MiddlewareManagerTest extends TestCase
         $this->assertCount(3, $response2->getPayload());
         self::assertSame(200, $response2->getStatusCode());
     }
+
+    /**
+     * @throws Throwable
+     */
+    public function testMagicInvoke(): void
+    {
+        $this->manager->push(new MiddlewareA);
+        /** @var JsonResponse $response1 */
+        $response = call_user_func($this->manager, $this->request);
+
+        $this->assertCount(3, $response->getPayload());
+        self::assertSame(200, $response->getStatusCode());
+    }
 }

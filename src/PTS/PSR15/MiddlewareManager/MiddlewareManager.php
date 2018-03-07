@@ -13,6 +13,17 @@ class MiddlewareManager implements RequestHandlerInterface
     protected $middlewares = [];
 
     /**
+     * @param ServerRequestInterface $request
+     *
+     * @return ResponseInterface
+     * @throws \Throwable
+     */
+    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    {
+        return $this->handle($request);
+    }
+
+    /**
      * @param MiddlewareInterface $middleware
      *
      * @return $this
