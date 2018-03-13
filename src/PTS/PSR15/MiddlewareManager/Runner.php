@@ -11,13 +11,10 @@ class Runner implements RequestHandlerInterface
 {
     /** @var MiddlewareInterface[] */
     protected $handlers = [];
-    /** @var int */
-    protected $position = 0;
 
-    public function __construct(iterable $handlers)
+    public function __construct(array $handlers)
     {
         $this->handlers = $handlers;
-        $this->position = 0;
     }
 
     /**
@@ -28,13 +25,11 @@ class Runner implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        if (!array_key_exists($this->position, $this->handlers)) {
+        if (\count($this->handlers) === 0) {
             throw new \OutOfRangeException('Handler not found');
         }
 
-        $middleware = $this->handlers[$this->position];
-        $this->position++;
-
+        $middleware = array_shift($this->handlers);
         return $middleware->process($request, $this);
     }
 }
