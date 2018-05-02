@@ -15,7 +15,7 @@ coding_style:
     php: {  }
 
 tools:
-    external_code_coverage: true
+    external_code_coverage: false
     php_code_coverage: true
     php_sim: true
     php_mess_detector: true
