@@ -6,9 +6,12 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use PTS\Events\EmitterTrait;
 
 class Runner implements RequestHandlerInterface
 {
+    use EmitterTrait;
+
     /** @var MiddlewareInterface[] */
     protected $handlers = [];
 
@@ -30,6 +33,10 @@ class Runner implements RequestHandlerInterface
         }
 
         $middleware = array_shift($this->handlers);
-        return $middleware->process($request, $this);
+
+        $request = $this->filter('middleware.before.process', $request, [$middleware]);
+        $response = $middleware->process($request, $this);
+
+        return $this->filter('middleware.after.process', $response, [$middleware, $request]);
     }
 }
