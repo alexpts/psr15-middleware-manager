@@ -4,53 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1623873b002c6c35c575726e252420ee",
+    "content-hash": "d544406857247958b23f5a578479ac91",
     "packages": [
-        {
-            "name": "alexpts/php-simple-events",
-            "version": "3.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/alexpts/php-simple-events.git",
-                "reference": "263c06efc994522b78b4e59f53a531fac185732d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/alexpts/php-simple-events/zipball/263c06efc994522b78b4e59f53a531fac185732d",
-                "reference": "263c06efc994522b78b4e59f53a531fac185732d",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^7.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "PTS\\Events": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Alexpts",
-                    "email": "alexpts3@gmail.com"
-                }
-            ],
-            "description": "Simple events and filters",
-            "homepage": "https://github.com/alexpts/php-simple-events",
-            "keywords": [
-                "emitter",
-                "events",
-                "filters"
-            ],
-            "time": "2018-05-02T08:42:17+00:00"
-        },
         {
             "name": "psr/http-message",
             "version": "1.0.1",
