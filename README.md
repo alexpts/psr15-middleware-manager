@@ -11,3 +11,17 @@ Middleware manager compatible with the [PSR-7](https://www.php-fig.org/psr/psr-7
 ## Installation
 
 ```$ composer require alexpts/psr15-middleware-manager```
+
+
+## Example
+```php
+use PTS\PSR15\MiddlewareManager\MiddlewareManager;
+
+$manager = new MiddlewareManager;
+
+$manager
+	->push(new RequestWithAttribute(['container' => $container]))
+	->push(new RouterMiddleware);
+
+$manager->handle($request);
+```
