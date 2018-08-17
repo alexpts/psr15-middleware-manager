@@ -21,13 +21,12 @@
         "psr/http-message": "^1.0"
     },
     "autoload": {
-        "psr-0": {
-            "PTS\\PSR15\\MiddlewareManager": "src"
+        "psr-4": {
+            "PTS\\PSR15\\MiddlewareManager\\": "src"
         }
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.0",
-        "zendframework/zend-diactoros": "^1.7",
-        "codeclimate/php-test-reporter": "^0.4.4"
+        "phpunit/phpunit": "^7.3",
+        "zendframework/zend-diactoros": "^1.8"
     }
 }

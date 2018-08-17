@@ -9,28 +9,59 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class MiddlewareManager implements RequestHandlerInterface
 {
-    /** @var callable[] */
-    protected $middlewares = [];
+    /** @var array */
+    protected $next = [];
+    /** @var PathResolver|null */
+    protected $pathResolver;
 
     /**
      * @param ServerRequestInterface $request
      *
      * @return ResponseInterface
      * @throws \Throwable
+     *
+     * @deprecated
      */
     public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
         return $this->handle($request);
     }
 
+    public function get(int $index = 0): ?array
+    {
+        return $this->next[$index] ?? null;
+    }
+
+    public function setPathResolver(PathResolver $pathResolver): void
+    {
+        $this->pathResolver = $pathResolver;
+    }
+
     /**
      * @param MiddlewareInterface $middleware
      *
      * @return $this
+     *
+     * @deprecated
      */
     public function push(MiddlewareInterface $middleware): self
     {
-        $this->middlewares[] = $middleware;
+        return $this->use($middleware);
+    }
+
+    /**
+     * @param MiddlewareInterface $middleware
+     * @param string|null $path
+     *
+     * @return $this
+     */
+    public function use(MiddlewareInterface $middleware, string $path = null): self
+    {
+        $this->next[] = [
+            $middleware,
+            $path
+        ];
+
         return $this;
     }
 
@@ -42,17 +73,18 @@ class MiddlewareManager implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $runner = $this->createRunner($this->middlewares);
+        $runner = $this->createRunner();
         return $runner->handle($request);
     }
 
     /**
-     * @param array $handlers
-     *
      * @return Runner
      */
-    protected function createRunner(array $handlers): Runner
+    protected function createRunner(): Runner
     {
-        return new Runner($handlers);
+        $runner = new Runner($this);
+        $runner->setPathResolver($this->pathResolver);
+
+        return $runner;
     }
 }

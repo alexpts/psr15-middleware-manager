@@ -1,12 +1,13 @@
 <?php
 
-use Psr\Http\Message\ResponseInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use PTS\PSR15\MiddlewareManager\MiddlewareManager;
+use PTS\PSR15\MiddlewareManager\PathResolver;
 use test\unit\classes\MiddlewareA;
 use test\unit\classes\MiddlewareB;
 use Zend\Diactoros\Response\JsonResponse;
+use Zend\Diactoros\ServerRequest;
 use Zend\Diactoros\ServerRequestFactory;
 
 include_once __DIR__ . '/classes/MiddlewareA.php';
@@ -35,12 +36,9 @@ class MiddlewareManagerTest extends TestCase
      */
     public function testSimpleMiddleware(): void
     {
-        $this->manager->push(new MiddlewareA);
+        $this->manager->use(new MiddlewareA);
         /** @var JsonResponse $response */
         $response = $this->manager->handle($this->request);
-
-        self::assertInstanceOf(ResponseInterface::class, $response);
-        self::assertInstanceOf(JsonResponse::class, $response);
 
         $data = $response->getPayload();
         $this->assertCount(3, $data);
@@ -95,6 +93,29 @@ class MiddlewareManagerTest extends TestCase
         $this->manager->push(new MiddlewareA);
         /** @var JsonResponse $response1 */
         $response = call_user_func($this->manager, $this->request);
+
+        $this->assertCount(3, $response->getPayload());
+        self::assertSame(200, $response->getStatusCode());
+    }
+
+    public function testMiddlewareWithBadPath(): void
+    {
+        $this->manager->use(new MiddlewareA, '/admin');
+        $this->manager->setPathResolver(new PathResolver());
+        $request = new ServerRequest([], [], '/not-admin');
+
+        $this->expectException(OutOfRangeException::class);
+        $this->expectExceptionMessage('Handler not found');
+        call_user_func($this->manager, $request);
+    }
+
+    public function testMiddlewareWithGoodPath(): void
+    {
+        $this->manager->use(new MiddlewareA, '/admin');
+        $this->manager->setPathResolver(new PathResolver());
+        $request = new ServerRequest([], [], '/admin');
+
+        $response = call_user_func($this->manager, $request);
 
         $this->assertCount(3, $response->getPayload());
         self::assertSame(200, $response->getStatusCode());

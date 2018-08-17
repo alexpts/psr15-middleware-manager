@@ -20,8 +20,9 @@ use PTS\PSR15\MiddlewareManager\MiddlewareManager;
 $manager = new MiddlewareManager;
 
 $manager
-	->push(new RequestWithAttribute(['container' => $container]))
-	->push(new RouterMiddleware);
+	->use($logMiddleware, '/admins/.*') // invoke only path /admins/.*
+	->use(new RequestWithAttribute(['container' => $container]))
+	->use(new RouterMiddleware);
 
 $manager->handle($request);
 ```
